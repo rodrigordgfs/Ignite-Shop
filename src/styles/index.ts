@@ -12,8 +12,8 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      green: "#00875F",
-      "green-light": "#00B37E",
+      "green-500": "#00875F",
+      "green-300": "#00B37E",
 
       "gray-900": "#121214",
       "gray-800": "#202024",
@@ -22,5 +22,12 @@ export const {
 
       white: "#FFFFFF",
     },
+
+    fontSizes: {
+      md: '1.125rem',
+      lg: '1.25rem',
+      xl: '1.5rem',
+      '2xl': '2rem',
+    }
   },
 });
