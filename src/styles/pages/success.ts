@@ -31,24 +31,34 @@ export const SuccessContainer = styled("main", {
     fontWeight: "bold",
 
     "&:hover": {
-      color: "$green300"
-    }
-  }
+      color: "$green300",
+    },
+  },
 });
 
 export const ImageContainer = styled("div", {
-  width: "100%",
-  maxWidth: 130,
-  height: 145,
+  height: 110,
   background: "linear-gradient(180deg, #1ea483 0%, #7465d4 100%)",
-  borderRadius: 8,
+  borderRadius: 9999,
   padding: "0.25rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   marginTop: "4rem",
+  border: "1px solid $gray100",
 
   img: {
     objectFit: "cover",
   },
+
+  "& + &": {
+    marginLeft: "-1rem",
+  },
+});
+
+export const ImagesListContainer = styled("div", {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
 });

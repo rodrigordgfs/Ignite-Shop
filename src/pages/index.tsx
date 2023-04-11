@@ -3,6 +3,8 @@ import Head from "next/head";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 
+import cartWhiteImg from "../assets/cart-white.svg";
+
 import { useKeenSlider } from "keen-slider/react";
 
 import { stripe } from "../lib/stripe";
@@ -10,17 +12,23 @@ import { HomeContainer, Product } from "../styles/pages/home";
 
 import "keen-slider/keen-slider.min.css";
 import Stripe from "stripe";
+import { IProducts } from "../interfaces/IProduct";
+import { useContext, useEffect } from "react";
+import { ProductsContext } from "../context/Products";
+import { CartContext } from "../context/Cart";
 
 interface HomeProps {
-  products: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: string;
-  }[];
+  data: IProducts[];
 }
 
-export default function Home({ products }: HomeProps) {
+export default function Home({ data }: HomeProps) {
+  const { handleSetProducts } = useContext(ProductsContext);
+  const { addProductToCart } = useContext(CartContext);
+
+  useEffect(() => {
+    handleSetProducts(data);
+  }, [data, handleSetProducts]);
+
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 3,
@@ -35,7 +43,7 @@ export default function Home({ products }: HomeProps) {
       </Head>
 
       <HomeContainer ref={sliderRef} className="keen-slider">
-        {products.map((product) => {
+        {data.map((product) => {
           return (
             <Link
               href={`/product/${product.id}`}
@@ -46,8 +54,18 @@ export default function Home({ products }: HomeProps) {
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
 
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(Number(product.price) / 100)}
+                    </span>
+                  </div>
+                  <div onClick={() => addProductToCart(product.id)}>
+                    <Image src={cartWhiteImg} alt="" width={32} height={32} />
+                  </div>
                 </footer>
               </Product>
             </Link>
@@ -70,16 +88,14 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(price.unit_amount / 100),
+      price: price.unit_amount,
+      priceId: price.id,
     };
-  });
+  }) as IProducts[];
 
   return {
     props: {
-      products,
+      data: products,
     },
     revalidate: 60 * 60 * 2, // 2 hours,
   };

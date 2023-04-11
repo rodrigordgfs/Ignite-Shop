@@ -7,9 +7,9 @@ import {
   ProductContainer,
   ProductDetails,
 } from "../../styles/pages/product";
-import axios from "axios";
-import { useState } from "react";
+import { useContext } from "react";
 import Head from "next/head";
+import { CartContext } from "../../context/Cart";
 
 interface ProductProps {
   product: {
@@ -23,21 +23,8 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false);
-
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true);
-      const response = await axios.post("/api/checkout", {
-        priceId: product.defaultPriceId,
-      });
-      const { checkoutUrl } = response.data;
-      window.location.href = checkoutUrl;
-    } catch (error) {
-      setIsCreatingCheckoutSession(false);
-    }
-  }
+  const { isCreatingCheckoutSession, handleCheckoutProducts } =
+    useContext(CartContext);
 
   const title = `${product.name} | Ignite Shop`;
 
@@ -60,7 +47,7 @@ export default function Product({ product }: ProductProps) {
 
           <button
             disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
+            onClick={handleCheckoutProducts}
           >
             Comprar agora
           </button>
