@@ -17,8 +17,13 @@ import { CartItem } from "./components/CartItem";
 
 export function CartDrawer() {
   const { isDrawerMenuOpen, toogleDrawerMenu } = useContext(SettingsContext);
-  const { productsCart, cartQuantity, cartTotalValue } =
-    useContext(CartContext);
+  const {
+    productsCart,
+    cartQuantity,
+    cartTotalValue,
+    handleCheckoutProducts,
+    isCreatingCheckoutSession,
+  } = useContext(CartContext);
 
   return (
     <Drawer
@@ -63,7 +68,14 @@ export function CartDrawer() {
           <p>sem produtos</p>
         )}
 
-        {cartQuantity > 0 && <CheckoutButton>Finalizar Compra</CheckoutButton>}
+        {cartQuantity > 0 && (
+          <CheckoutButton
+            disabled={isCreatingCheckoutSession}
+            onClick={handleCheckoutProducts}
+          >
+            Finalizar Compra
+          </CheckoutButton>
+        )}
       </CartDrawerContainer>
     </Drawer>
   );
