@@ -3,6 +3,8 @@ import Head from "next/head";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 
+import cartWhiteImg from "../assets/cart-white.svg";
+
 import { useKeenSlider } from "keen-slider/react";
 
 import { stripe } from "../lib/stripe";
@@ -46,8 +48,13 @@ export default function Home({ products }: HomeProps) {
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
 
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </div>
+                  <div>
+                    <Image src={cartWhiteImg} alt="" width={32} height={32} />
+                  </div>
                 </footer>
               </Product>
             </Link>
